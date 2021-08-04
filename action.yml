@@ -1,0 +1,14 @@
+name: 'Build/publish image to ECR'
+description: 'Build and push image to ECR'
+inputs:
+  image-name:  # id of input
+    description: 'Image name'
+    required: true
+outputs:
+  time: # id of output
+    description: 'The time image was pushed to ECR'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.image-name }}
