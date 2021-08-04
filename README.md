@@ -4,6 +4,9 @@ This action will build an image and upload it to the respective ECR repository.
 
 ## Env var needs
 
+- AWS_REGION
+
+- AWS_ACCOUNT
 
 
 ## Example usage
