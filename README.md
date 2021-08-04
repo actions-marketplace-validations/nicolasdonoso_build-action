@@ -12,6 +12,19 @@ This action will build an image and upload it to the respective ECR repository.
 ## Example usage
 
 ```
-- name: Build/publish image to ECR
-  uses: nicolasdonoso/build-action@v1.1
+on: [push]
+
+jobs:
+  build:
+    runs-on: self-hosted
+    name: Build
+    env:
+      AWS_ACCOUNT: <AWS ACCOUNT ID>
+      AWS_REGION: <AWS REGION>
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build/publish image to AWS ECR
+        uses: nicolasdonoso/build-action@v1.0
+      
 ```
