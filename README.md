@@ -1,6 +1,6 @@
 # Build ECR image action
 
-This action will build an image and upload it to the respective ECR repository
+This action will build an image and upload it to the respective ECR repository.
 
 ## Env var needs
 
