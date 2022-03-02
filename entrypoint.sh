@@ -1,7 +1,7 @@
 #!/bin/sh -l
 
 export PROJECT_NAME=$(echo $GITHUB_REPOSITORY|cut -d '/' -f2)
-export TAG=$GITHUB_JOB
+export TAG=$GITHUB_RUN_ID
 echo "Building docker image $PROJECT_NAME"
 
 aws ecr get-login --region $AWS_REGION --no-include-email | sh;
