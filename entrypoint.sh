@@ -1,15 +1,21 @@
 #!/bin/sh -l
 
-export PROJECT_NAME=$(echo $GITHUB_REPOSITORY|cut -d '/' -f2)
-echo "Building docker image $PROJECT_NAME"
+echo "Building docker image $REPO_NAME"
+if [[ -z $ECR_REPO ]]
+    then export REPO_NAME=$(echo $GITHUB_REPOSITORY|cut -d '/' -f2)
+else
+    export REPO_NAME=$ECR_REPO
+fi
 
 aws ecr get-login --region $AWS_REGION --no-include-email | sh;
 if [[ $GITHUB_REF_NAME == 'master' ]];
     then 
-    docker build -t $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/$PROJECT_NAME:latest -t $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/$PROJECT_NAME:$GITHUB_RUN_ID .
-    docker push $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/$PROJECT_NAME:latest
-    docker push $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/$PROJECT_NAME:$GITHUB_RUN_ID
+    export TAG="latest"
+    docker build -t $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/$REPO_NAME:$TAG -t $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/$REPO_NAME:$GITHUB_RUN_ID .
+    docker push $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/$REPO_NAME:$TAG
+    docker push $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/$REPO_NAME:$GITHUB_RUN_ID
 else
-    docker build -t $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/$PROJECT_NAME:$GITHUB_RUN_ID .
-    docker push $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/$PROJECT_NAME:$GITHUB_RUN_ID
+    export TAG=$GITHUB_RUN_ID
+    docker build -t $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/$REPO_NAME:$TAG .
+    docker push $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/$REPO_NAME:$TAG
 fi
