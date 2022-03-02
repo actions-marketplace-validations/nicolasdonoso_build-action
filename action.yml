@@ -10,5 +10,5 @@ outputs:
 runs:
   using: 'composite'
   image: 'Dockerfile'
-  # args:
-  #   - ${{ inputs.image-name }}
+  args:
+    - ${{ inputs.image-name }}
