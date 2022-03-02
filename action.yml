@@ -8,7 +8,7 @@ outputs:
   time: # id of output
     description: 'The time image was pushed to ECR'
 runs:
-  using: 'docker'
+  using: 'composite'
   image: 'Dockerfile'
-  args:
-    - ${{ inputs.image-name }}
+  # args:
+  #   - ${{ inputs.image-name }}
