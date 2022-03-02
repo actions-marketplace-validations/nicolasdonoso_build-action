@@ -2,7 +2,6 @@
 
 export PROJECT_NAME=$(echo $GITHUB_REPOSITORY|cut -d '/' -f2)
 echo "Building docker image $PROJECT_NAME"
-echo $GITHUB_REF_NAME
 
 aws ecr get-login --region $AWS_REGION --no-include-email | sh;
 if [[ $GITHUB_REF_NAME == 'master' ]];
