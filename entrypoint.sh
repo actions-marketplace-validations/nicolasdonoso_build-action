@@ -9,14 +9,14 @@ do
     if [[ -z $ECR_REPO ]]
         then echo "ECR repo name defined by repo name"
         export REPO_NAME=$(echo $GITHUB_REPOSITORY|cut -d '/' -f2)
-    elif [[ $suffix != "" ]]
+    elif [[ $suffix != "Dockerfile" ]]
         then echo "ECR repo name defined by image suffix"
         export REPO_NAME=$suffix
     else
         echo "ECR repo name defined by env var ECR_REPO"
         export REPO_NAME=$ECR_REPO
     fi
-    echo "building image: $image, repo: $ECR_REPO, tag: $TAG"
+    echo "building image: $image, repo: $ECR_REPO"
     if [[ $GITHUB_REF_NAME == 'master' ]];
         then 
         export TAG="latest"
@@ -24,7 +24,7 @@ do
         docker push $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/$REPO_NAME:$TAG
         docker push $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/$REPO_NAME:$GITHUB_RUN_ID
     else
-        export TAG=$GITHUB_RUN_IDcccccbcdlig
+        export TAG=$GITHUB_RUN_ID
         docker build -f $image -t $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/$REPO_NAME:$TAG .
         docker push $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/$REPO_NAME:$TAG
     fi
