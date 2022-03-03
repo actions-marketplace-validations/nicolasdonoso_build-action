@@ -11,6 +11,7 @@ else
 fi
 aws ecr get-login --region $AWS_REGION --no-include-email | sh;
 if [[ -z $DOCKERFILE_LOCATION ]]
+    then 
     for image in $(echo $images|tr ',' '\n')
     do  
         export suffix=$(echo $image|cut -d '.' -f2)
