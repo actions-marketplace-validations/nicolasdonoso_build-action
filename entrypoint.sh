@@ -22,7 +22,7 @@ fi
 if [[ -z $DOCKERFILE_LOCATION ]]
     then
     if [[ -z $images ]]
-        if [[ $(ls|grep Docker -c) == "1" ]]
+        then if [[ $(ls|grep Docker -c) == "1" ]]
             then echo single;
             echo "Inject npmrc...";
             cp services/npm/.npmrc .npmrc;
