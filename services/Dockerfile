@@ -1,4 +1,4 @@
-FROM 743726466037.dkr.ecr.us-west-2.amazonaws.com/node-alpine
+FROM ${AWS_ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com/node-alpine
 WORKDIR /usr/src/app
 ARG NPM_TOKEN
 COPY .npmrc .npmrc
