@@ -49,10 +49,10 @@ if [[ -z $DOCKERFILE_LOCATION ]]
                 prefix=`echo $f | cut -d "/" -f 2 | cut -d "." -f 2`;
                 if [ $prefix == "Dockerfile" ];
                     then echo "---> 2... $prefix <---"
-                    docker build -f templates/eng/services/$file --build-arg ENV=$ENV --build-arg NPM_TOKEN=$NPM_TOKEN -t $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/$REPO_NAME:$RUN_ID .;
+                    docker build -f services/$file --build-arg ENV=$ENV --build-arg NPM_TOKEN=$NPM_TOKEN -t $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/$REPO_NAME:$RUN_ID .;
                     docker push $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/$REPO_NAME:$RUN_ID;
                 else echo "---> 3... $prefix <---"
-                    docker build -f templates/eng/services/$file --build-arg ENV=$ENV --build-arg NPM_TOKEN=$NPM_TOKEN -t $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/$REPO_NAME:$prefix-$RUN_ID .;
+                    docker build -f services/$file --build-arg ENV=$ENV --build-arg NPM_TOKEN=$NPM_TOKEN -t $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/$REPO_NAME:$prefix-$RUN_ID .;
                     docker push $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/$REPO_NAME:$prefix-$RUN_ID;
                 fi;
             done;
