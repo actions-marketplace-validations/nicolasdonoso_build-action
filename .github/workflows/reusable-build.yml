@@ -5,7 +5,7 @@ on:
   
 jobs:
   build:
-    runs-on: self-hosted
+    # runs-on: self-hosted
     environment: build
     env:
       AWS_ACCOUNT: ${{ secrets.PRIMARY_AWS_ACCOUNT }}
@@ -23,7 +23,7 @@ jobs:
       - name: Build/publish image to ECR
         uses: nicolasdonoso/build-action@v1.7
   dev:
-    runs-on: self-hosted
+    # runs-on: self-hosted
     environment: $GITHUB_WORKFLOW
     needs: build
     env:
