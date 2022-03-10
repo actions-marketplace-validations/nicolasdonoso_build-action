@@ -22,7 +22,7 @@ jobs:
           fi
       - name: Build/publish image to ECR
         uses: nicolasdonoso/build-action@v1.7
-  dev-nba:
+  dev:
     runs-on: self-hosted
     environment: $GITHUB_WORKFLOW
     needs: build
