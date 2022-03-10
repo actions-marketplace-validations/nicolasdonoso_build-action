@@ -6,6 +6,7 @@ on:
 jobs:
   build:
     # runs-on: self-hosted
+    runs-on: ubuntu-latest
     environment: build
     env:
       AWS_ACCOUNT: ${{ secrets.PRIMARY_AWS_ACCOUNT }}
@@ -24,6 +25,7 @@ jobs:
         uses: nicolasdonoso/build-action@v1.7
   dev:
     # runs-on: self-hosted
+    runs-on: ubuntu-latest
     environment: $GITHUB_WORKFLOW
     needs: build
     env:
