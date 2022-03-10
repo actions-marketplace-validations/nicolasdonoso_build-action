@@ -2,34 +2,43 @@ name: Airflow reusable workflow
 
 on:
   workflow_call:
-    inputs:
-      AWS_REGION:
-        required: true
-        type: string
-      DOCKERFILE_LOCATION:
-        required: true
-        type: string
-    secrets:
-      AWS_ACCOUNT:
-        required: true
+  
 jobs:
   build:
     runs-on: self-hosted
     environment: build
+    env:
+      AWS_ACCOUNT: ${{ secrets.PRIMARY_AWS_ACCOUNT }}
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Sport Definition
-        run: |
-          echo SPORT=$(echo $GITHUB_JOB|cut -d'-' -f2) >> $GITHUB_ENV
-      - name: check env vars
-        run: echo $GITHUB_ENV
       - name: Tag definition
         run: |
           if [[ $GITHUB_REF_NAME == 'master' ]] || [[ $GITHUB_REF_NAME == 'main' ]];
-            then echo TAG="$SPORT-v2-latest" >> $GITHUB_ENV
+            then echo TAG="latest" >> $GITHUB_ENV
           else
-            echo TAG="$SPORT-$GITHUB_RUN_ID" >> $GITHUB_ENV
+            echo TAG="$GITHUB_RUN_ID" >> $GITHUB_ENV
           fi
       - name: Build/publish image to ECR
-        uses: nicolasdonoso/build-action@v1.6.6
+        uses: nicolasdonoso/build-action@v1.7
+  dev-nba:
+    runs-on: self-hosted
+    environment: $GITHUB_WORKFLOW
+    needs: build
+    env:
+      AWS_ACCOUNT: ${{ secrets.PRIMARY_AWS_ACCOUNT }}
+      K8S_KUBECONFIG: ${{ secrets.AWS_ENG_DEV_KUBECONFIG }}
+      K8S_CLUSTER: ${{ secrets.ENG_DEV_CLUSTER }}
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v3
+      - name: Vars defintion
+        run: |
+          echo CI_JOB_STAGE=$(echo $GITHUB_JOB|cut -d'-' -f1) >> $GITHUB_ENV
+          echo LEAGUE=-$(echo $GITHUB_JOB|cut -d'-' -f2) >> $GITHUB_ENV
+          echo NAME=$(echo ${{ github.repository }}|sed 's/_/-/g'|cut -d '/' -f2) >> $GITHUB_ENV
+          echo CI_PROJECT_NAME=$(echo ${{ github.repository }}|cut -d '/' -f2) >> $GITHUB_ENV
+          echo CI_JOB_STAGE=$(echo $GITHUB_JOB|cut -d'-' -f1) >> $GITHUB_ENV
+      - name: Deploy from config
+        uses: nicolasdonoso/config-handler@v1.0
